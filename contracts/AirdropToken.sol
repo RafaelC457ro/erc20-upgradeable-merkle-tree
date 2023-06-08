@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 
 contract AirdropToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
-    bytes32 private merkleRoot;
+    bytes32 public merkleRoot;
     mapping(address => bool) public claimed;
 
     event Redeem(address indexed account, uint256 amount);
@@ -40,23 +40,6 @@ contract AirdropToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
     }
 
     /**
-     * @dev mint tokens
-     * @param account address of the account
-     * @param amount amount of tokens to mint
-     */
-    function mint(address account, uint256 amount) public onlyOwner {
-        _mint(account, amount);
-    }
-
-    /**
-     * @dev set merkle root
-     * @param _merkleRoot merkle root
-     */
-    function setMerkleRoot(bytes32 _merkleRoot) public onlyOwner {
-        merkleRoot = _merkleRoot;
-    }
-
-    /**
      * @dev verify merkle proof
      * @param proof merkle proof
      * @param amount amount of tokens to redeem
@@ -71,6 +54,6 @@ contract AirdropToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
      * @param amount amount of tokens to redeem
      */
     function _leaf(address account, uint256 amount) private pure returns (bytes32) {
-        return keccak256(abi.encodePacked(account, amount));
+        return keccak256(bytes.concat(keccak256(abi.encode(account, amount))));
     }
 }

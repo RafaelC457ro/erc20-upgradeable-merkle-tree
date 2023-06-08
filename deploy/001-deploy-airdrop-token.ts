@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { generateDefaultRootTree } from "../utils/generateRootTree";
+import { generateDefaultTree } from "../utils/generateRootTree";
 
 const deployment: DeployFunction = async function ({
   getNamedAccounts,
@@ -9,7 +9,7 @@ const deployment: DeployFunction = async function ({
   const { deploy } = deployments;
   const { deployer, owner } = await getNamedAccounts();
 
-  const root = await generateDefaultRootTree();
+  const root = await generateDefaultTree();
 
   await deploy("AirdropToken", {
     from: deployer,

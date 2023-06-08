@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 
-export async function generateDefaultRootTree() {
+export async function generateDefaultTree() {
   const { deployer, owner, receiver } = await ethers.getNamedSigners();
 
   const list = [
@@ -12,7 +12,9 @@ export async function generateDefaultRootTree() {
 
   const tree = StandardMerkleTree.of(list, ["address", "uint256"]);
 
-  console.log("Root:", tree.root);
-
-  return tree;
+  return {
+    root: tree.root,
+    list,
+    tree,
+  };
 }
