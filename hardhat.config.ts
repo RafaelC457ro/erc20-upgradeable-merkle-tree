@@ -8,6 +8,7 @@ import "@nomiclabs/hardhat-solhint";
 import "hardhat-gas-reporter";
 import "hardhat-deploy";
 import "solidity-coverage";
+import "@openzeppelin/hardhat-upgrades";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -67,7 +68,7 @@ const config: HardhatUserConfig = {
     deployer: {
       default: 0,
     },
-    sender: {
+    owner: {
       default: 1,
     },
     receiver: {

@@ -1,8 +1,8 @@
 {
-  "name": "solidity-channel-exercise",
+  "name": "erc20-upgradeable-merkle-tree",
   "license": "MIT",
   "version": "1.0.0",
-  "description": "Solidity Channel Exercise",
+  "description": "ERC20 Upgradeable that allows to claim using a merkle tree.",
   "author": "Rafael Castro",
   "keywords": [
     "blockchain",
@@ -16,6 +16,7 @@
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13",
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@nomiclabs/hardhat-solhint": "^3.0.1",
+    "@openzeppelin/hardhat-upgrades": "^1.27.0",
     "@typechain/ethers-v5": "^10.2.1",
     "@typechain/hardhat": "^6.1.6",
     "dotenv": "^16.0.3",
@@ -23,6 +24,8 @@
     "hardhat": "^2.14.0",
     "hardhat-deploy": "^0.11.28",
     "hardhat-gas-reporter": "^1.0.9",
+    "install": "^0.13.0",
+    "npm": "^9.6.7",
     "prettier": "^2.8.8",
     "prettier-plugin-solidity": "^1.1.3",
     "solidity-coverage": "^0.8.2",
@@ -42,9 +45,12 @@
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13"
   },
   "comments": {
-    "overrides": "This is a workaround to fix the hardhat-ethers conflit with hardhat-deploy."
+    "overrides": {
+      "@nomiclabs/hardhat-ethers": "This is a workaround to fix the hardhat-ethers conflit with hardhat-deploy."
+    }
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.0"
+    "@openzeppelin/contracts-upgradeable": "^4.9.0",
+    "@openzeppelin/merkle-tree": "^1.0.4"
   }
 }
