@@ -14,29 +14,7 @@ describe("Airdrop", () => {
     return { deployer, owner, receiver, tree, list };
   }
 
-  async function upgradeFixture() {
-    await deployments.fixture();
-    const { tree, list } = await generateDefaultTree();
-    const { deployer, owner } = await ethers.getNamedSigners();
-    const instance = await ethers.getContract("AirdropToken");
-
-    const OwnerProxyAdmin: OwnerProxyAdmin = await ethers.getContract(
-      "OwnerProxyAdmin"
-    );
-
-    const AirdropTokenV2 = await ethers.getContract("AirdropTokenV2");
-
-    // upgrade
-    await OwnerProxyAdmin.connect(owner).upgrade(
-      instance.address,
-      AirdropTokenV2.address
-    );
-
-    return { deployer, owner, tree, list, instance };
-  }
-
   describe("Sucesss", () => {
-    // it should be able to claim tokens
     it("should be able to claim tokens", async () => {
       const { deployer, owner, receiver, tree } = await loadFixture(
         defaulFixture
@@ -152,7 +130,6 @@ describe("Airdrop", () => {
       ).to.be.revertedWith("Invalid proof");
     });
 
-    // it should fail when try to set the token again
     it("should fail when try to set the token again", async () => {
       const { deployer } = await loadFixture(defaulFixture);
 

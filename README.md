@@ -10,7 +10,7 @@ This is my implementation of the follow exercise:
 
 ## How I solved?
 
-I've used the package [@openzeppelin/merkle-tree](https://github.com/OpenZeppelin/merkle-tree) to generate the merkle tree and verify the proofs.
+I've used the package [@openzeppelin/merkle-tree](https://github.com/OpenZeppelin/merkle-tree) to generate the merkle tree and verify the proofs. ie:
 
 ```typescript
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";

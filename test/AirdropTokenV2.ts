@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { ethers, deployments, upgrades } from "hardhat";
+import { ethers, deployments } from "hardhat";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import {
   AirdropTokenV2,
