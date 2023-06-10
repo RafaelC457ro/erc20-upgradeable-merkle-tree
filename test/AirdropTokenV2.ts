@@ -5,6 +5,7 @@ import {
   AirdropTokenV2,
   AirdropToken,
   OwnerProxyAdmin,
+  Airdrop,
 } from "../typechain-types";
 import { generateDefaultTree } from "../utils/generateRootTree";
 
@@ -18,10 +19,10 @@ describe("AirdropTokenV2", () => {
   }
 
   async function upgradeFixture() {
-    await deployments.fixture();
+    await deployments.fixture(["airdrop-token-v1", "airdrop-token-v2"]);
     const { tree, list } = await generateDefaultTree();
     const { deployer, owner } = await ethers.getNamedSigners();
-    const instance = await ethers.getContract("AirdropToken");
+    const instance = await ethers.getContract("AirdropToken_Proxy");
 
     const OwnerProxyAdmin: OwnerProxyAdmin = await ethers.getContract(
       "OwnerProxyAdmin"
@@ -36,7 +37,7 @@ describe("AirdropTokenV2", () => {
       AirdropTokenV2.address
     );
 
-    return { deployer, owner, tree, list, instance };
+    return { deployer, owner, tree, list };
 
     // const AirDropToken = await ethers.getContractFactory("AirDropToken");
     // const AirDropTokenV2 = await ethers.getContractFactory("AirDropTokenV2`");
@@ -55,17 +56,6 @@ describe("AirdropTokenV2", () => {
   }
 
   describe("Sucesss", () => {
-    it("should get the version of the contract", async () => {
-      await loadFixture(defaulFixture);
-      await loadFixture(upgradeFixture);
-
-      const AirdropToken: AirdropTokenV2 = await ethers.getContract(
-        "AirdropTokenV2"
-      );
-
-      expect(await AirdropToken.version()).to.equal("v2");
-    });
-
     // it should be able to claim tokens and then upgrade and check the balance
     it("should be able to claim tokens and then upgrade and check the balance", async () => {
       const { instance } = await loadFixture(defaulFixture);
@@ -79,7 +69,9 @@ describe("AirdropTokenV2", () => {
         instance.address
       );
 
-      await AirdropToken.connect(deployer).redeem(
+      const Airdrop: Airdrop = await ethers.getContract("Airdrop");
+
+      await Airdrop.connect(deployer).redeem(
         tree.getProof([deployer.address, ethers.utils.parseEther("1000")]),
         ethers.utils.parseEther("1000")
       );
@@ -100,10 +92,21 @@ describe("AirdropTokenV2", () => {
         ethers.utils.parseEther("1000")
       );
     });
+
+    it("should get the version of the contract", async () => {
+      await loadFixture(defaulFixture);
+      await loadFixture(upgradeFixture);
+
+      const AirdropToken: AirdropTokenV2 = await ethers.getContract(
+        "AirdropTokenV2"
+      );
+
+      expect(await AirdropToken.version()).to.equal("v2");
+    });
   });
 
   describe("Failure", () => {
-    it("should revert when trying to claim tokens", async () => {
+    it("should revert when trying to claim tokens after the upgrade", async () => {
       const { instance } = await loadFixture(defaulFixture);
       await loadFixture(upgradeFixture);
 
@@ -116,8 +119,10 @@ describe("AirdropTokenV2", () => {
         instance.address
       );
 
+      const Airdrop: Airdrop = await ethers.getContract("Airdrop");
+
       expect(
-        AirdropToken.connect(deployer).redeem(
+        Airdrop.connect(deployer).redeem(
           tree.getProof([deployer.address, ethers.utils.parseEther("1000")]),
           ethers.utils.parseEther("1000")
         )

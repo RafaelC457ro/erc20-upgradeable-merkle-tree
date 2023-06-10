@@ -1,6 +1,8 @@
+import { ethers, deployments } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { generateDefaultTree } from "../utils/generateRootTree";
+import { Airdrop } from "../typechain-types";
 
 const deployment: DeployFunction = async function ({
   getNamedAccounts,
@@ -11,7 +13,7 @@ const deployment: DeployFunction = async function ({
 
   const root = await generateDefaultTree();
 
-  await deploy("AirdropToken", {
+  const airdrop = await deploy("Airdrop", {
     from: deployer,
     proxy: {
       owner: owner,
@@ -29,6 +31,32 @@ const deployment: DeployFunction = async function ({
     },
     log: true,
   });
+
+  const airdropToken = await deploy("AirdropToken", {
+    from: deployer,
+    proxy: {
+      owner: owner,
+      proxyContract: "OpenZeppelinTransparentProxy",
+      execute: {
+        init: {
+          methodName: "initialize",
+          args: [airdrop.address],
+        },
+      },
+      viaAdminContract: {
+        name: "OwnerProxyAdmin",
+        artifact: "OwnerProxyAdmin",
+      },
+    },
+    log: true,
+  });
+
+  const Airdrop: Airdrop = await ethers.getContractAt(
+    "Airdrop",
+    airdrop.address
+  );
+
+  await Airdrop.setToken(airdropToken.address);
 };
 
 deployment.tags = ["all", "airdrop-token-v1"];
