@@ -22,6 +22,10 @@ const deployment: DeployFunction = async function ({
           args: [root.root],
         },
       },
+      viaAdminContract: {
+        name: "OwnerProxyAdmin",
+        artifact: "OwnerProxyAdmin",
+      },
     },
     log: true,
   });

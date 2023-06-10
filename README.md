@@ -10,7 +10,7 @@ This is my implementation of the follow exercise:
 
 ## How I solved?
 
-merkle-tree shape:
+I've used the package [@openzeppelin/merkle-tree](https://github.com/OpenZeppelin/merkle-tree) to generate the merkle tree and verify the proofs.
 
 ```typescript
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
@@ -35,8 +35,6 @@ const isProofValid = tree.verify(proof);
 console.log({ root, proof, isProofValid });
 ```
 
-````
-
 ## Prerequisites
 
 Make sure you have installed the following:
@@ -54,7 +52,7 @@ nvm install
 nvm use
 
 npm install
-````
+```
 
 ## Without nvm
 

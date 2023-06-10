@@ -3,11 +3,10 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 
-contract AirdropToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
-    bytes32 public merkleRoot;
+contract AirdropToken is Initializable, ERC20Upgradeable {
+    bytes32 private merkleRoot;
     mapping(address => bool) public claimed;
 
     event Redeem(address indexed account, uint256 amount);
@@ -55,5 +54,12 @@ contract AirdropToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
      */
     function _leaf(address account, uint256 amount) private pure returns (bytes32) {
         return keccak256(bytes.concat(keccak256(abi.encode(account, amount))));
+    }
+
+    /**
+     * @dev get version
+     */
+    function version() public pure virtual returns (string memory) {
+        return "v1";
     }
 }
