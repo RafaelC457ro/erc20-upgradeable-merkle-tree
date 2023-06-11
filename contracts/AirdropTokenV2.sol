@@ -6,7 +6,8 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol";
 
 contract AirdropTokenV2 is Initializable, ERC20Upgradeable {
-    bytes32 private __do_not_use;
+    /// @custom:oz-renamed-from airdrop
+    address private __do_not_use;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -20,5 +21,5 @@ contract AirdropTokenV2 is Initializable, ERC20Upgradeable {
         return "v2";
     }
 
-    bytes32[49] __gap;
+    uint256[49] __gap;
 }

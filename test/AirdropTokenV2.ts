@@ -11,7 +11,7 @@ import { generateDefaultTree } from "../utils/generateRootTree";
 
 describe("AirdropTokenV2", () => {
   async function defaulFixture() {
-    await deployments.fixture(["airdrop-token-v1"]);
+    await deployments.fixture(["airdrop-token-v1", "airdrop-token-v2"]);
     const instance = await ethers.getContract("AirdropToken_Proxy");
 
     const { deployer, owner, receiver } = await ethers.getNamedSigners();
@@ -19,7 +19,6 @@ describe("AirdropTokenV2", () => {
   }
 
   async function upgradeFixture() {
-    await deployments.fixture(["airdrop-token-v1", "airdrop-token-v2"]);
     const { tree, list } = await generateDefaultTree();
     const { deployer, owner } = await ethers.getNamedSigners();
     const instance = await ethers.getContract("AirdropToken_Proxy");
@@ -31,32 +30,15 @@ describe("AirdropTokenV2", () => {
     const AirdropTokenV2 = await ethers.getContract("AirdropTokenV2");
 
     // upgrade
-
     await OwnerProxyAdmin.connect(owner).upgrade(
       instance.address,
       AirdropTokenV2.address
     );
 
     return { deployer, owner, tree, list };
-
-    // const AirDropToken = await ethers.getContractFactory("AirDropToken");
-    // const AirDropTokenV2 = await ethers.getContractFactory("AirDropTokenV2`");
-
-    // //initilize with 42
-    // const implementation = await upgrades.deployProxy(AirDropToken, [
-    //   tree.root,
-    // ]);
-
-    // const instance = await upgrades.upgradeProxy(
-    //   implementation.address,
-    //   AirDropTokenV2
-    // );
-
-    // return { deployer, owner, tree, list, instance };
   }
 
   describe("Sucesss", () => {
-    // it should be able to claim tokens and then upgrade and check the balance
     it("should be able to claim tokens and then upgrade and check the balance", async () => {
       const { instance } = await loadFixture(defaulFixture);
 
@@ -80,8 +62,8 @@ describe("AirdropTokenV2", () => {
         ethers.utils.parseEther("1000")
       );
 
-      // upgrade
-      await loadFixture(upgradeFixture);
+      // do not use deploymenst.fixture() here because it will reset the contract
+      await upgradeFixture();
 
       const AirdropTokenV2: AirdropTokenV2 = await ethers.getContractAt(
         "AirdropTokenV2",
@@ -91,11 +73,11 @@ describe("AirdropTokenV2", () => {
       expect(await AirdropTokenV2.balanceOf(deployer.address)).to.equal(
         ethers.utils.parseEther("1000")
       );
+      expect(await AirdropToken.version()).to.equal("v2");
     });
 
     it("should get the version of the contract", async () => {
       await loadFixture(defaulFixture);
-      await loadFixture(upgradeFixture);
 
       const AirdropToken: AirdropTokenV2 = await ethers.getContract(
         "AirdropTokenV2"
@@ -107,17 +89,10 @@ describe("AirdropTokenV2", () => {
 
   describe("Failure", () => {
     it("should revert when trying to claim tokens after the upgrade", async () => {
-      const { instance } = await loadFixture(defaulFixture);
-      await loadFixture(upgradeFixture);
+      await loadFixture(defaulFixture);
 
       const { deployer } = await ethers.getNamedSigners();
       const { tree } = await generateDefaultTree();
-
-      // version 1
-      const AirdropToken: AirdropToken = await ethers.getContractAt(
-        "AirdropToken",
-        instance.address
-      );
 
       const Airdrop: Airdrop = await ethers.getContract("Airdrop");
 

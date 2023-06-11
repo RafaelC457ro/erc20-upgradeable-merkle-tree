@@ -66,6 +66,34 @@ npm install
 npm run test
 ```
 
+## Upgrade manually using hardhat upgrades
+
+This some the scripts that I created to test the upgrade manually:
+
+### deploy localhost
+
+```shell
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+### upgrade localhost
+
+```shell
+npx hardhat run scripts/upgrade.js --network localhost
+```
+
+### validade upgrade
+
+```shell
+npx hardhat run scripts/validate-upgrade.js --network localhost
+```
+
+### validade airdrop
+
+```shell
+npx hardhat run scripts/validate-airdrop.js --network localhost
+```
+
 ## License
 
 [MIT License](LICENSE) &copy; [Rafael Castro](https://github.com/RafaelC457ro)

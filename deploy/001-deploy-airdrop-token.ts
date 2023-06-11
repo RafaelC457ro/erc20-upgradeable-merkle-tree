@@ -1,4 +1,4 @@
-import { ethers, deployments } from "hardhat";
+import { ethers } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { generateDefaultTree } from "../utils/generateRootTree";
@@ -33,6 +33,7 @@ const deployment: DeployFunction = async function ({
   });
 
   const airdropToken = await deploy("AirdropToken", {
+    contract: "AirdropToken",
     from: deployer,
     proxy: {
       owner: owner,
@@ -57,6 +58,8 @@ const deployment: DeployFunction = async function ({
   );
 
   await Airdrop.setToken(airdropToken.address);
+
+  console.log("airdropToken(proxy)", airdropToken.address);
 };
 
 deployment.tags = ["all", "airdrop-token-v1"];
