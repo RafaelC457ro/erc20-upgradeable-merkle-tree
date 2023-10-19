@@ -73,13 +73,13 @@ This some the scripts that I created to test the upgrade manually:
 ### deploy localhost
 
 ```shell
-npx hardhat run scripts/deploy.js --network localhost
+npx hardhat deploy --network localhost
 ```
 
 ### upgrade localhost
 
 ```shell
-npx hardhat run scripts/upgrade.js --network localhost
+npx hardhat run scripts/upgrade-token.ts --network localhost
 ```
 
 ### validade upgrade
@@ -91,7 +91,7 @@ npx hardhat run scripts/validate-upgrade.js --network localhost
 ### validade airdrop
 
 ```shell
-npx hardhat run scripts/validate-airdrop.js --network localhost
+npx hardhat run scripts/validate-airdrop-implementation.js --network localhost
 ```
 
 ## License
