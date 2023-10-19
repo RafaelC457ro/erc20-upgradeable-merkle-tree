@@ -85,13 +85,13 @@ npx hardhat run scripts/upgrade-token.ts --network localhost
 ### validade upgrade
 
 ```shell
-npx hardhat run scripts/validate-upgrade.js --network localhost
+npx hardhat run scripts/validate-upgrade.ts --network localhost
 ```
 
 ### validade airdrop
 
 ```shell
-npx hardhat run scripts/validate-airdrop-implementation.js --network localhost
+npx hardhat run scripts/validate-airdrop-implementation.ts --network localhost
 ```
 
 ## License
